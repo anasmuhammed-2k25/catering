@@ -2,15 +2,25 @@
   "version": 2,
   "builds": [
     {
-      "src": "Backend/app.js",
+      "src": "backend/server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "frondend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "backend/server.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "Backend/app.js"
+      "dest": "/frondend/$1"
     }
-  ],
-  "buildCommand": "npm install --prefix Backend && npm install --prefix Frontend && npm run build --prefix Frontend"
+  ]
 }
