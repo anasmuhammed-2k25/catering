@@ -1,0 +1,179 @@
+
+
+
+body{
+  margin: 0%;
+}
+.admin-page { padding-top: 60px; padding-bottom: 80px; }
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.admin-stat {
+  background: var(--white);
+  border: 1px solid var(--burgundy-border);
+  padding: 24px;
+  text-align: center;
+}
+
+.admin-stat.highlight {
+  border-color: var(--burgundy);
+  background: var(--burgundy-pale);
+}
+
+.admin-stat-value {
+  font-family: var(--font-serif);
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--burgundy);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.admin-stat-label {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+/* Tabs */
+.admin-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--burgundy-border);
+  margin-bottom: 32px;
+}
+
+.admin-tab {
+  padding: 12px 28px;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-family: var(--font-sans);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: -1px;
+}
+
+.admin-tab:hover { color: var(--burgundy); }
+
+.admin-tab.active {
+  color: var(--burgundy);
+  border-bottom-color: var(--burgundy);
+}
+
+.tab-badge {
+  background: var(--burgundy);
+  color: var(--ivory);
+  font-size: 9px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Table */
+.admin-table-wrap {
+  overflow-x: auto;
+  background: var(--white);
+  border: 1px solid var(--burgundy-border);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-table th {
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--text-light);
+  padding: 14px 20px;
+  text-align: left;
+  background: var(--ivory);
+  border-bottom: 1px solid var(--burgundy-border);
+}
+
+.admin-table td {
+  padding: 16px 20px;
+  color: var(--text-mid);
+  border-bottom: 1px solid rgba(122,30,50,0.06);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td { border-bottom: none; }
+
+.admin-table tr:hover td { background: rgba(122,30,50,0.02); }
+
+.td-title { color: var(--text-dark); font-weight: 500; }
+
+.action-btns { display: flex; gap: 8px; }
+
+.action-btn {
+  padding: 6px 14px;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.action-btn.approve { background: #d1e7dd; color: #0a3622; }
+.action-btn.approve:hover:not(:disabled) { background: #a3cfbb; }
+
+.action-btn.reject { background: #f8d7da; color: #58151c; }
+.action-btn.reject:hover:not(:disabled) { background: #f1aeb5; }
+
+.action-done { color: var(--text-light); font-size: 18px; }
+
+.empty-row { text-align: center; color: var(--text-light); padding: 48px; font-style: italic; }
+
+/* Role badges */
+.role-badge-customer { background: #e8d5b0; color: #4a2800; }
+.role-badge-worker { background: #cfe2ff; color: #084298; }
+.role-badge-admin { background: #e2d9f3; color: #3d1a78; }
+
+/* Loading */
+.loading-state { text-align: center; padding: 60px; }
+.loading-spinner {
+  width: 32px; height: 32px;
+  border: 2px solid var(--burgundy-border);
+  border-top-color: var(--burgundy);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-state p { font-size: 13px; color: var(--text-light); }
+
+@media (max-width: 900px) {
+  .admin-stats { grid-template-columns: repeat(2, 1fr); }
+  .admin-tabs { flex-wrap: wrap; }
+  .admin-tab { flex: 1 1 auto; text-align: center; justify-content: center; }
+}
+
+@media (max-width: 500px) {
+  .admin-stats { grid-template-columns: 1fr; }
+  .admin-table-wrap { font-size: 11px; }
+  .admin-table th, .admin-table td { padding: 10px; }
+}
