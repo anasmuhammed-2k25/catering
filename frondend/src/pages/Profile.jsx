@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./Profile.css";
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const Profile = ({ user, onUpdateUser }) => {
   const [editing, setEditing] = useState(false);
@@ -57,7 +59,7 @@ const Profile = ({ user, onUpdateUser }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:5000/api/users/profile", {
+      const res = await fetch( `${apiUrl}/api/users/profile`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

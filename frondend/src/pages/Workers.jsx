@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Workers.css";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Workers = ({ user }) => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,7 @@ const Workers = ({ user }) => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/events/approved");
+        const res = await fetch(`${apiUrl}/api/events/approved`);
         const data = await res.json();
         setEvents(data);
       } catch {
@@ -30,7 +32,7 @@ const Workers = ({ user }) => {
     setApplying(eventId);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/apply`, {
+      const res = await fetch(`${apiUrl}/api/events/${eventId}/apply`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AdminDashboard.css";
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const AdminDashboard = () => {
   const [events, setEvents] = useState([]);
@@ -15,8 +17,8 @@ const AdminDashboard = () => {
     const fetchAll = async () => {
       try {
         const [evRes, usrRes] = await Promise.all([
-          fetch("http://localhost:5000/api/admin/events", { headers }),
-          fetch("http://localhost:5000/api/admin/users", { headers }),
+          fetch(`${apiUrl}/api/admin/events`, { headers }),
+          fetch(`${apiUrl}/api/admin/users`, { headers }),
         ]);
         const [evData, usrData] = await Promise.all([evRes.json(), usrRes.json()]);
         setEvents(evData);
@@ -30,7 +32,7 @@ const AdminDashboard = () => {
   const handleEventAction = async (id, action) => {
     setActionLoading(id + action);
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/events/${id}/${action}`, { method: "PUT", headers });
+      const res = await fetch(`${apiUrl}/api/admin/events/${id}/${action}`, { method: "PUT", headers });
       if (res.ok) {
         setEvents((prev) =>
           prev.map((e) => e._id === id ? { ...e, status: action === "approve" ? "approved" : "rejected" } : e)
@@ -43,7 +45,7 @@ const AdminDashboard = () => {
   const handleUserAction = async (id, action) => {
     setActionLoading("user" + id + action);
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${id}/${action}`, { method: "PUT", headers });
+      const res = await fetch(`${apiUrl}/api/admin/users/${id}/${action}`, { method: "PUT", headers });
       if (res.ok) {
         setUsers((prev) =>
           prev.map((u) => u._id === id ? { ...u, status: action === "approve" ? "approved" : "rejected" } : u)
@@ -56,7 +58,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Remove this user?")) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/users/${id}`, { method: "DELETE", headers });
+      const res = await fetch(`${apiUrl}/api/admin/users/${id}`, { method: "DELETE", headers });
       if (res.ok) setUsers((prev) => prev.filter((u) => u._id !== id));
     } catch { }
   };

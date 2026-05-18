@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Home.css";
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const heroContent = [
   { text: "Begin Here", img: "/catering_hero.png" },
@@ -63,7 +65,7 @@ const Home = ({ user }) => {
 
     const fetchStats = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/events");
+        const res = await fetch(`${apiUrl}/api/events`);
         const events = await res.json();
         
         if (events && events.length > 0) {

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./PostEvent.css";
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const PostEvent = ({ user }) => {
   const [myEvents, setMyEvents] = useState([]);
@@ -28,7 +30,7 @@ const PostEvent = ({ user }) => {
   try {
     const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5000/api/events", {
+    const res = await fetch(`${apiUrl}/api/events`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +77,7 @@ const PostEvent = ({ user }) => {
     const fetchMyEvents = async () => {
       if (!user) return;
       try {
-        const res = await fetch("http://localhost:5000/api/events");
+        const res = await fetch(`${apiUrl}/api/events`);
         const data = await res.json();
         // filter events where customer matches current user
         const mine = data.filter(e => e.customer?._id === user._id || e.customer === user._id);
@@ -91,7 +93,7 @@ const PostEvent = ({ user }) => {
     setApproving(workerId);
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/approve-worker`, {
+      const res = await fetch(`${apiUrl}/api/events/${eventId}/approve-worker`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +116,7 @@ const PostEvent = ({ user }) => {
     setApproving(workerId); // Using the same loading state for simplicity
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:5000/api/events/${eventId}/reject-worker`, {
+      const res = await fetch(`${apiUrl}/api/events/${eventId}/reject-worker`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

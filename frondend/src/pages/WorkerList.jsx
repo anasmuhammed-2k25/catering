@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./WorkerList.css";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const WorkerList = () => {
   const [workers, setWorkers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,7 +10,7 @@ const WorkerList = () => {
   useEffect(() => {
     const fetchWorkers = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/users/workers");
+        const res = await fetch(`${apiUrl}/api/users/workers`);
         const data = await res.json();
         setWorkers(data);
       } catch (err) {

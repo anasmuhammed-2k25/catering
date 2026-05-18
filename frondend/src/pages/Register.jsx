@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Register = ({ onLogin }) => {
   const navigate = useNavigate();
 
@@ -32,7 +34,7 @@ const handleSubmit = async (e) => {
   setLoading(true);
 
   try {
-    const res = await fetch("http://localhost:5000/api/auth/register", {
+    const res = await fetch( `${apiUrl}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
+const apiUrl = import.meta.env.VITE_API_URL;
+
+
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
@@ -19,7 +22,7 @@ const Login = ({ onLogin }) => {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
