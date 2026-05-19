@@ -15,12 +15,15 @@
   ],
   "routes": [
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/api/(.*)",
-      "dest": "backend/server.js"
+      "dest": "/backend/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/Frontend/$1"
+      "dest": "/Frontend/index.html"
     }
   ]
 }
