@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./WorkerList.css";
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || "";
 
 const WorkerList = () => {
   const [workers, setWorkers] = useState([]);

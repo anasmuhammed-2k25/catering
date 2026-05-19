@@ -24,8 +24,9 @@ import { authMiddleware } from "./middleware/authMiddleware.js";
 const app = express();
 
 
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/catering";
 mongoose
-  .connect("mongodb://127.0.0.1:27017/catering")
+  .connect(MONGODB_URI)
   .then(() => console.log("MongoDB Connected ✅"))
   .catch((err) => console.log("DB Error ❌:", err));
 

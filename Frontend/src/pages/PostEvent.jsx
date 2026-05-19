@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PostEvent.css";
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || "";
 
 
 const PostEvent = ({ user }) => {

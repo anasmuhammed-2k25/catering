@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Workers.css";
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL || "";
 
 const Workers = ({ user }) => {
   const [events, setEvents] = useState([]);
