@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 export const register = async (req, res) => {
   try {
@@ -11,10 +12,27 @@ export const register = async (req, res) => {
     const exist = await User.findOne({ email });
     if (exist) return res.status(400).json({ message: "User exists" });
 
-    const user = new User({ name, email, password, phone, role, experience, bio });
+    // Encrypt the password using bcryptjs
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = new User({ 
+      name, 
+      email, 
+      password: hashedPassword, 
+      phone, 
+      role, 
+      experience, 
+      bio 
+    });
     await user.save();
 
-    const token = jwt.sign({ id: user._id }, "supersecretkey", { expiresIn: "7d" });
+    // Sign the token with user ID and role
+    const token = jwt.sign(
+      { id: user._id, role: user.role }, 
+      process.env.JWT_SECRET || "supersecretkey", 
+      { expiresIn: "7d" }
+    );
 
     res.json({ token, user });
   } catch (err) {
@@ -24,14 +42,25 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const user = await User.findOne({
-      email: req.body.email,
-      password: req.body.password
-    });
+    const { email, password } = req.body;
 
+    if (!email || !password)
+      return res.status(400).json({ message: "Missing credentials" });
+
+    // Retrieve user by email
+    const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, "supersecretkey", { expiresIn: "7d" });
+    // Compare input password with the hashed password in database
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+    // Sign the token with user ID and role
+    const token = jwt.sign(
+      { id: user._id, role: user.role }, 
+      process.env.JWT_SECRET || "supersecretkey", 
+      { expiresIn: "7d" }
+    );
 
     res.json({ token, user });
   } catch (err) {

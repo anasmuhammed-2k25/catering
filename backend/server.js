@@ -22,7 +22,7 @@ import {
   updateUserStatus, 
   deleteUser 
 } from "./controllers/adminController.js";
-import { authMiddleware } from "./middleware/authMiddleware.js";
+import { authMiddleware, adminMiddleware } from "./middleware/authMiddleware.js";
 
 const app = express();
 
@@ -55,11 +55,11 @@ app.put("/api/events/:id/approve-worker", authMiddleware, approveWorker);
 app.put("/api/events/:id/reject-worker", authMiddleware, rejectWorker);
 
 
-app.get("/api/admin/events", getAdminEvents);
-app.put("/api/admin/events/:id/:action", updateEventStatus);
-app.get("/api/admin/users", getAdminUsers);
-app.put("/api/admin/users/:id/:action", updateUserStatus);
-app.delete("/api/admin/users/:id", deleteUser);
+app.get("/api/admin/events", authMiddleware, adminMiddleware, getAdminEvents);
+app.put("/api/admin/events/:id/:action", authMiddleware, adminMiddleware, updateEventStatus);
+app.get("/api/admin/users", authMiddleware, adminMiddleware, getAdminUsers);
+app.put("/api/admin/users/:id/:action", authMiddleware, adminMiddleware, updateUserStatus);
+app.delete("/api/admin/users/:id", authMiddleware, adminMiddleware, deleteUser);
 
 
 const PORT = process.env.PORT || 5000;
