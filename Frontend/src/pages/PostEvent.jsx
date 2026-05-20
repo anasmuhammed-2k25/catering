@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PostEvent.css";
+import { showSuccess, showError, showConfirm, showToast } from "../utils/swal";
 const apiUrl = import.meta.env.VITE_API_URL || "";
 
 
@@ -17,61 +18,65 @@ const PostEvent = ({ user }) => {
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  if (!form.title || !form.date || !form.location || !form.guestCount) {
-    setError("Please fill all required fields.");
-    return;
-  }
+    if (!form.title || !form.date || !form.location || !form.guestCount) {
+      const errMsg = "Please fill all required fields.";
+      setError(errMsg);
+      showError("Incomplete Form", "Please fill in all required fields marked with *.");
+      return;
+    }
 
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch(`${apiUrl}/api/events`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(form),
-    });
-
-    // ✅ SAFE PARSE
-    const text = await res.text();
-
-    let data;
     try {
-      data = JSON.parse(text);
-    } catch {
-      throw new Error("Server error: not returning JSON");
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(`${apiUrl}/api/events`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(form),
+      });
+
+      // ✅ SAFE PARSE
+      const text = await res.text();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Server error: not returning JSON");
+      }
+
+      if (!res.ok) {
+        throw new Error(data.message || "Submission failed");
+      }
+
+      showSuccess("Event Posted!", "Your event has been submitted for approval. Our admin team will review it shortly.");
+      setSuccess(true);
+
+      setForm({
+        title: "",
+        date: "",
+        location: "",
+        guestCount: "",
+        cuisine: "",
+        description: "",
+        budget: "",
+        city: "Kozhikode",
+      });
+
+    } catch (err) {
+      setError(err.message);
+      showError("Submission Failed", err.message);
+    } finally {
+      setLoading(false);
     }
-
-    if (!res.ok) {
-      throw new Error(data.message || "Submission failed");
-    }
-
-    setSuccess(true);
-
-    setForm({
-      title: "",
-      date: "",
-      location: "",
-      guestCount: "",
-      cuisine: "",
-      description: "",
-      budget: "",
-      city: "Kozhikode",
-    });
-
-  } catch (err) {
-    setError(err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
     const fetchMyEvents = async () => {
@@ -90,6 +95,9 @@ const PostEvent = ({ user }) => {
   }, [user, success]);
 
   const handleApproveWorker = async (eventId, workerId) => {
+    const result = await showConfirm("Approve Professional?", "Are you sure you want to approve this worker for your event?", "Yes, approve");
+    if (!result.isConfirmed) return;
+    
     setApproving(workerId);
     try {
       const token = localStorage.getItem("token");
@@ -104,16 +112,22 @@ const PostEvent = ({ user }) => {
       if (res.ok) {
         const data = await res.json();
         setMyEvents(prev => prev.map(e => e._id === eventId ? data.event : e));
+        showToast("success", "Worker approved successfully!");
+      } else {
+        showError("Failed", "Failed to approve worker.");
       }
     } catch (err) {
-      console.error(err);
+      showError("Error", "An error occurred while approving the worker.");
     } finally {
       setApproving(null);
     }
   };
 
   const handleRejectWorker = async (eventId, workerId) => {
-    setApproving(workerId); // Using the same loading state for simplicity
+    const result = await showConfirm("Reject Professional?", "Are you sure you want to reject this worker for your event?", "Yes, reject");
+    if (!result.isConfirmed) return;
+
+    setApproving(workerId);
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(`${apiUrl}/api/events/${eventId}/reject-worker`, {
@@ -127,9 +141,12 @@ const PostEvent = ({ user }) => {
       if (res.ok) {
         const data = await res.json();
         setMyEvents(prev => prev.map(e => e._id === eventId ? data.event : e));
+        showToast("success", "Worker rejected successfully.");
+      } else {
+        showError("Failed", "Failed to reject worker.");
       }
     } catch (err) {
-      console.error(err);
+      showError("Error", "An error occurred while rejecting the worker.");
     } finally {
       setApproving(null);
     }

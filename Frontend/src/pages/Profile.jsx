@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Profile.css";
+import { showSuccess, showError } from "../utils/swal";
 const apiUrl = import.meta.env.VITE_API_URL || "";
 
 
@@ -29,7 +30,9 @@ const Profile = ({ user, onUpdateUser }) => {
 
     // --- Validation ---
     if (!formData.name || formData.name.trim().length < 3) {
-      setError("Full Name must be at least 3 characters long.");
+      const errMsg = "Full Name must be at least 3 characters long.";
+      setError(errMsg);
+      showError("Validation Error", errMsg);
       setLoading(false);
       return;
     }
@@ -37,7 +40,9 @@ const Profile = ({ user, onUpdateUser }) => {
     if (formData.phone) {
       const phoneRegex = /^\+?[0-9\s\-]{10,15}$/;
       if (!phoneRegex.test(formData.phone)) {
-        setError("Please enter a valid phone number (10-15 digits).");
+        const errMsg = "Please enter a valid phone number (10-15 digits).";
+        setError(errMsg);
+        showError("Validation Error", errMsg);
         setLoading(false);
         return;
       }
@@ -45,12 +50,16 @@ const Profile = ({ user, onUpdateUser }) => {
 
     if (user.role === "worker") {
       if (!formData.experience || formData.experience.trim().length < 2) {
-        setError("Please provide your professional experience.");
+        const errMsg = "Please provide your professional experience.";
+        setError(errMsg);
+        showError("Validation Error", errMsg);
         setLoading(false);
         return;
       }
       if (!formData.bio || formData.bio.trim().length < 10) {
-        setError("Please provide a bio (at least 10 characters).");
+        const errMsg = "Please provide a bio (at least 10 characters).";
+        setError(errMsg);
+        showError("Validation Error", errMsg);
         setLoading(false);
         return;
       }
@@ -73,10 +82,12 @@ const Profile = ({ user, onUpdateUser }) => {
       if (!res.ok) throw new Error(data.message || "Failed to update profile");
 
       onUpdateUser({ ...user, ...data.user });
+      showSuccess("Success!", "Profile updated successfully!");
       setSuccess("Profile updated successfully!");
       setEditing(false);
     } catch (err) {
       setError(err.message);
+      showError("Update Failed", err.message);
     } finally {
       setLoading(false);
     }

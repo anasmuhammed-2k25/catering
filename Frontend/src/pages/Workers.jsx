@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Workers.css";
-
+import { showToast, showError } from "../utils/swal";
 const apiUrl = import.meta.env.VITE_API_URL || "";
 
 const Workers = ({ user }) => {
@@ -36,8 +36,15 @@ const Workers = ({ user }) => {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (res.ok) setApplied((prev) => [...prev, eventId]);
-    } catch { }
+      if (res.ok) {
+        setApplied((prev) => [...prev, eventId]);
+        showToast("success", "Application submitted successfully!");
+      } else {
+        showError("Failed", "Failed to submit application.");
+      }
+    } catch {
+      showError("Error", "An error occurred while submitting your application.");
+    }
     finally { setApplying(null); }
   };
 

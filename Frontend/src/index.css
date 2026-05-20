@@ -146,3 +146,61 @@ input, textarea, select {
     margin-bottom: 32px;
   }
 }
+
+/* Premium SweetAlert Custom Styling */
+.premium-swal-popup {
+  font-family: 'Montserrat', sans-serif !important;
+  border: 1px solid rgba(122, 30, 50, 0.15) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 20px 40px rgba(44, 16, 24, 0.15) !important;
+}
+
+.premium-swal-popup .swal2-title {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 24px !important;
+  font-weight: 500 !important;
+  color: #2c1018 !important;
+  letter-spacing: 0.02em !important;
+}
+
+.premium-swal-popup .swal2-html-container {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 13.5px !important;
+  line-height: 1.6 !important;
+  color: rgba(44, 16, 24, 0.7) !important;
+}
+
+.premium-swal-button {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  padding: 12px 28px !important;
+  border-radius: 2px !important;
+  transition: opacity 0.3s !important;
+}
+
+.premium-swal-button:hover {
+  opacity: 0.9 !important;
+}
+
+.premium-swal-cancel-button {
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 10px !important;
+  letter-spacing: 0.2em !important;
+  text-transform: uppercase !important;
+  font-weight: 400 !important;
+  padding: 12px 28px !important;
+  border-radius: 2px !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(44, 16, 24, 0.15) !important;
+  color: rgba(44, 16, 24, 0.6) !important;
+  transition: all 0.3s !important;
+}
+
+.premium-swal-cancel-button:hover {
+  background-color: rgba(44, 16, 24, 0.05) !important;
+  color: #2c1018 !important;
+}
+

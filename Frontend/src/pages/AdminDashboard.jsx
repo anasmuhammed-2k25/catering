@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./AdminDashboard.css";
+import { showConfirm, showSuccess, showError, showToast } from "../utils/swal";
 const apiUrl = import.meta.env.VITE_API_URL || "";
 
 
@@ -37,8 +38,13 @@ const AdminDashboard = () => {
         setEvents((prev) =>
           prev.map((e) => e._id === id ? { ...e, status: action === "approve" ? "approved" : "rejected" } : e)
         );
+        showToast("success", `Event ${action === "approve" ? "approved" : "rejected"} successfully!`);
+      } else {
+        showError("Failed", `Failed to ${action} event.`);
       }
-    } catch { }
+    } catch {
+      showError("Error", `An error occurred while trying to ${action} the event.`);
+    }
     finally { setActionLoading(null); }
   };
 
@@ -50,17 +56,31 @@ const AdminDashboard = () => {
         setUsers((prev) =>
           prev.map((u) => u._id === id ? { ...u, status: action === "approve" ? "approved" : "rejected" } : u)
         );
+        showToast("success", `Worker ${action === "approve" ? "approved" : "rejected"} successfully!`);
+      } else {
+        showError("Failed", `Failed to ${action} worker.`);
       }
-    } catch { }
+    } catch {
+      showError("Error", `An error occurred while trying to ${action} the worker.`);
+    }
     finally { setActionLoading(null); }
   };
 
   const handleDeleteUser = async (id) => {
-    if (!window.confirm("Remove this user?")) return;
+    const result = await showConfirm("Remove User?", "Are you sure you want to remove this user? This action cannot be undone.", "Yes, remove");
+    if (!result.isConfirmed) return;
+    
     try {
       const res = await fetch(`${apiUrl}/api/admin/users/${id}`, { method: "DELETE", headers });
-      if (res.ok) setUsers((prev) => prev.filter((u) => u._id !== id));
-    } catch { }
+      if (res.ok) {
+        setUsers((prev) => prev.filter((u) => u._id !== id));
+        showSuccess("Removed!", "The user has been successfully removed.");
+      } else {
+        showError("Failed", "Failed to remove user.");
+      }
+    } catch {
+      showError("Error", "An error occurred while removing the user.");
+    }
   };
 
   const stats = {
