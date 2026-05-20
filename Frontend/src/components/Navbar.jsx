@@ -36,21 +36,36 @@ const Navbar = ({ user, onLogout }) => {
           {user && user.role === "admin" && (
             <Link className={`cc-link ${isActive("/admin") ? "active" : ""}`} to="/admin" onClick={() => setMenuOpen(false)}>Dashboard</Link>
           )}
+          <div className="cc-auth-mobile">
+            {user ? (
+              <>
+                <Link to="/profile" className="cc-mobile-username" onClick={() => setMenuOpen(false)}>Hello, {user.name}</Link>
+                <button className="cc-mobile-logout" onClick={() => { onLogout(); setMenuOpen(false); }}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link className="cc-mobile-register" to="/register" onClick={() => setMenuOpen(false)}>Register</Link>
+                <Link className="cc-mobile-login" to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="cc-right">
-          {user ? (
-            <>
-              <Link to="/profile" className="cc-username" style={{ textDecoration: 'none' }}>Hello, {user.name}</Link>
-              <div className="cc-divider"></div>
-              <button className="cc-login" onClick={onLogout}>Logout</button>
-            </>
-          ) : (
-            <>
-              <Link className="cc-book" to="/register">Register</Link>
-              <Link className="cc-login-btn" to="/login">Login</Link>
-            </>
-          )}
+          <div className="cc-auth-desktop">
+            {user ? (
+              <>
+                <Link to="/profile" className="cc-username" style={{ textDecoration: 'none' }}>Hello, {user.name}</Link>
+                <div className="cc-divider"></div>
+                <button className="cc-login" onClick={onLogout}>Logout</button>
+              </>
+            ) : (
+              <>
+                <Link className="cc-book" to="/register">Register</Link>
+                <Link className="cc-login-btn" to="/login">Login</Link>
+              </>
+            )}
+          </div>
           <button className="cc-hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
             <span></span><span></span><span></span>
           </button>
