@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import { register, login } from "./controllers/authController.js";
 import { updateProfile, getApprovedWorkers } from "./controllers/userController.js";
@@ -24,7 +27,7 @@ import { authMiddleware } from "./middleware/authMiddleware.js";
 const app = express();
 
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/catering";
+const MONGODB_URI = process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/catering";
 mongoose
   .connect(MONGODB_URI)
   .then(() => console.log("MongoDB Connected ✅"))
